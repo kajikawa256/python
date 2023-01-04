@@ -19,15 +19,12 @@ driver = webdriver.Chrome(options=options)
 #登録したURLにアクセスする
 driver.get(URL)
 
-#カレントページのURLを取得
-cur_url = driver.current_url
-#カレントページのURLを表示
-# print(cur_url)
-
+#変数宣言
 words = []
 answer = []
 
-for i in range(50):
+#処理部
+for i in range(5000):
   try:
     elem = driver.find_element(By.CSS_SELECTOR,
   ("button[id='nextbutton2']"))
@@ -38,9 +35,11 @@ for i in range(50):
   if i % 2 == 0:
     elem = driver.find_element(By.CSS_SELECTOR,'h3')
     words.append(elem.text)
-    elem = driver.find_element(By.CSS_SELECTOR,("span[id='mean']"))
-    answer.append(elem.text)
-  
+    elem = driver.find_elements(By.CSS_SELECTOR,'li')
+    for x in elem:
+      answer.append(x.text.strip('1234\n'))
+    
+#出力部
 output = collections.Counter(words)
 output2 = collections.Counter(answer)
 print('出題された英単語で一番多かったもの',max(output),output[max(output)],end='')
