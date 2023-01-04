@@ -1,25 +1,18 @@
-from time import sleep
+import collections
 from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 
-#オプション
-options = webdriver.ChromeOptions()
-options.add_argument('d--disable-blink-features=AutomationControlled')
-options.add_argument('--blink-settings=imagesEnabled=false')
-options.add_argument('–headless')
-options.add_argument('–no-sandbox')
-options.add_argument('–disable-dev-shm-usage')
 
 #URLを設定
 URL = 'http://enworddojo.holy.jp/index.php'
 
-#高速化
-desired = DesiredCapabilities().CHROME
-desired['pageLoadStrategy'] = 'none'
+#オプション
+options = Options()
+options.add_argument('--headless')
 
 #Chromeを起動
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(options=options)
 
 #登録したURLにアクセスする
 driver.get(URL)
@@ -29,13 +22,18 @@ cur_url = driver.current_url
 #カレントページのURLを表示
 # print(cur_url)
 
+words = []
 
-for _ in range(10):
+for i in range(50):
   elem = driver.find_element(By.CSS_SELECTOR,
 ("button[id='nextbutton2']"))
   driver.execute_script('arguments[0].click();',elem)
-  #1秒待機
-  # time.sleep(1)
+  if i % 2 == 0:
+    elem = driver.find_element(By.CSS_SELECTOR,'h3')
+    words.append(elem.text)
+  
+output = collections.Counter(words)
+print(output)
 
 #Chromeを終了
 driver.quit()
