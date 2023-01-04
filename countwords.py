@@ -33,7 +33,7 @@ for i in range(50):
     words.append(elem.text)
   
 output = collections.Counter(words)
-print(output)
+print(max(output),output[max(output)])
 
 #Chromeを終了
 driver.quit()
